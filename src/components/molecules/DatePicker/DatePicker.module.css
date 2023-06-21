@@ -1,0 +1,63 @@
+.bubbleStyle {
+  width: 160px;
+  padding: 10px;
+}
+
+.controlContainer {
+  display: flex;
+  gap: 10px;
+}
+
+.selectArea {
+  display: flex;
+}
+
+.dayArea {
+  display: flex;
+  width: 100%;
+  justify-content: space-around;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.dayArea > p {
+  margin: 10px 0px 4px 0px;
+  width: calc(100% / 7);
+  text-align: center;
+}
+
+.daysContainer {
+  display: flex;
+  flex-wrap: wrap;
+  width: 160px;
+}
+
+.daysContainer > p {
+  flex-basis: calc(100% / 7);
+
+  text-align: center;
+}
+
+.day {
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
+
+.cDay:hover {
+  background-color: #c7d1f4;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.otherDay {
+  color: #e5e7eb;
+}
+
+.input {
+  width: 100px;
+}
+
+.innerInput {
+  width: 100px;
+}

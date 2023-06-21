@@ -1,0 +1,13 @@
+.miniButton {
+  display: flex;
+  width: 21.36px;
+  height: 21.36px;
+  background: #c7d1f4;
+  border-radius: 4px;
+  border: unset;
+  text-align: center;
+  align-items: center;
+}
+.miniButton:hover {
+  background: #7786d2;
+}

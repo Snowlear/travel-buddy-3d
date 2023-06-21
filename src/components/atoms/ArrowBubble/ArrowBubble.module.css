@@ -1,0 +1,23 @@
+.relativeView {
+  position: relative;
+}
+
+.arrowBubble {
+  background: white;
+  position: relative;
+  border-radius: 5px;
+  border: 1px solid #7786d2;
+}
+.right:after {
+  content: "";
+  position: absolute;
+  top: calc(50% - 3px);
+  right: -3px;
+  height: 5px;
+  width: 5px;
+  background: white;
+  transform: rotate(-45deg);
+  border-bottom: inherit;
+  border-right: inherit;
+  box-shadow: inherit;
+}

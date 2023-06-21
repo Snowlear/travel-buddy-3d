@@ -1,0 +1,50 @@
+.bubble {
+  width: 100%;
+  margin-top: 42px;
+  border: 1px solid #c7d1f4;
+  box-shadow: 0px 4px 6px -2px rgba(0, 0, 0, 0.05);
+  border-radius: 8px;
+  position: absolute;
+  background-color: white;
+  z-index: 1;
+}
+
+.up:before {
+  content: "";
+  width: 0px;
+  height: 0px;
+  position: absolute;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-top: 8px solid transparent;
+  border-bottom: 8px solid #c7d1f4;
+  left: 10px;
+  top: -16px;
+}
+
+.right:before {
+  content: "";
+  width: 0px;
+  height: 0px;
+  position: absolute;
+  border-top: 8px solid transparent;
+  border-bottom: 8px solid transparent;
+  border-left: 8px solid #c7d1f4;
+  right: -8px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.relativeView {
+  position: relative;
+}
+
+@media only screen and (max-width: 600px) {
+  .up:before {
+    left: unset;
+    right: 10px;
+  }
+  .bubble {
+    right: 0px;
+  }
+}

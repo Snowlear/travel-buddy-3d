@@ -1,0 +1,104 @@
+.inputTag {
+  padding: 8px 12px 8px 10px;
+  gap: 10px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  font-weight: 500;
+  border-radius: 6px;
+  flex: 1;
+  font-family: "Inter";
+}
+
+.inputTag:focus {
+  outline: 1px solid #e5e7eb;
+}
+
+.inputWrapper {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 16px;
+  padding-bottom: 20px;
+}
+
+.invalidInput {
+  color: #ff0000;
+  border: 1px solid #ff0000;
+}
+
+.errorLabel {
+  position: absolute;
+  bottom: 2px;
+  padding-top: 2px;
+  color: #ff0000;
+  width: 200px;
+}
+
+.label {
+  padding-bottom: 2px;
+}
+
+.input_number {
+  width: 100px;
+}
+
+.inputTag_number {
+  padding-left: 26px;
+  text-align: center;
+  width: 100%;
+}
+
+.input_number::-webkit-outer-spin-button,
+.input_number::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.input_number[type="number"] {
+  -moz-appearance: textfield;
+}
+
+.minusButton {
+  position: absolute;
+  top: 24px;
+  left: 5px;
+}
+
+.plusButton {
+  position: absolute;
+  top: 24px;
+  right: 5px;
+}
+
+.clearButton {
+  position: absolute;
+  right: 4px;
+  top: 5px;
+}
+.clearButton:hover {
+  cursor: pointer;
+}
+
+.inputField {
+  display: flex;
+}
+
+.inputDialog {
+  position: relative;
+  display: flex;
+  flex: 1;
+}
+
+.removeButton {
+  padding-left: 10px;
+}
+
+.removeButton:hover {
+  cursor: pointer;
+}
+
+.arrows {
+  cursor: pointer;
+}

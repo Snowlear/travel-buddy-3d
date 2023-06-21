@@ -1,0 +1,27 @@
+.select {
+  width: 100%;
+  appearance: none;
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  background: #c7d1f4;
+  border: 1px solid #e5e7eb;
+  border-radius: 4px;
+  padding: 1px 14px 2px 4px;
+  text-align: center;
+}
+
+.selectContainer {
+  position: relative;
+}
+
+.selectContainer::after {
+  content: "";
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  transform: rotate(-45deg);
+  border: 5px solid transparent;
+  border-top-color: #000;
+}

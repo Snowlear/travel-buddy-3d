@@ -1,0 +1,19 @@
+.containerWrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  max-width: 734px;
+  width: 100%;
+  max-height: 90%;
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 38px;
+}
+
+@media only screen and (max-width: 600px) {
+  .containerWrapper {
+    padding: 10px;
+  }
+}

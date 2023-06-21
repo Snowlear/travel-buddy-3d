@@ -1,0 +1,14 @@
+.link {
+  background-color: unset;
+  border: unset;
+  color: #7786d2;
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 16px;
+}
+
+.link:hover {
+  cursor: pointer;
+}

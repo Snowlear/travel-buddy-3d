@@ -1,0 +1,68 @@
+.text {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 16px;
+  font-feature-settings: "salt" on;
+}
+
+.boldText {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 16px;
+  font-feature-settings: "salt" on;
+}
+
+.blueText {
+  color: #7786d2;
+}
+
+.bubbleText {
+  margin: 1px 8px;
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.pathWrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.distancesBox {
+  padding: 22px 10px 10px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.dotContainer {
+  padding-top: 10px;
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  align-items: center;
+  gap: 2px;
+}
+
+.citiesContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  padding: 10px;
+  color: black;
+  text-align: left;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 14px;
+}
+
+.citiesContainer p {
+  margin: 0px;
+}
