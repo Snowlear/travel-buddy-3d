@@ -4,6 +4,7 @@ import NotFoundPage from "../components/pages/NotFoundPage/NotFoundPage";
 import ResultsPage from "../components/pages/ResultsPage/ResultsPage";
 import SearchPage from "../components/pages/SearchPage/SearchPage";
 import { CitiesProvider } from "../context/CitiesContext";
+import ThreeDimentioanalResultsPage from "../components/pages/3DViewResultPage/3DViewResultsPage";
 
 const AppRouter = () => {
   return (
@@ -14,6 +15,10 @@ const AppRouter = () => {
           <Route
             path="/results/:passengerCount?:tripDate?:tripDestinations?"
             Component={ResultsPage}
+          />
+          <Route
+            path="/3dresults/:passengerCount?:tripDate?:tripDestinations?"
+            Component={ThreeDimentioanalResultsPage}
           />
           <Route path="*" Component={NotFoundPage} />
         </Routes>

@@ -1,18 +1,20 @@
 import React, { useEffect, useState } from "react";
-import styles from "./ResultsPage.module.css";
+import styles from "./3DViewResultsPage.module.css";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { isObjectOfArraysOfStrings, sumArray } from "../../../utils/array";
 import Button from "../../atoms/Button/Button";
 import { City, CityDistanceData } from "../../../types/City";
 import { useCitiesContext } from "../../../context/CitiesContext";
 import TripResultView from "../../organisms/TripResultView/TripResultView";
-import MainFrameTemplate from "../../templates/MainFrameTemplate/MainFrameTemplate";
+import EarthCanvas from "../../molecules/EarthGlobeCanvas/EarthGlobeCanvas";
+import Modal from "../../atoms/Modal/Modal";
 
-const ResultsPage: React.FC = () => {
+const ThreeDimentioanalResultsPage: React.FC = () => {
   const navigate = useNavigate();
   const [distancesData, setDistancesData] = useState<CityDistanceData>();
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
   const [error, setError] = useState<string | undefined>();
+  const [cities, setCities] = useState<City[]>([]);
   const [searchParams] = useSearchParams();
   const passengerCount = searchParams.get("passengerCount");
   const tripDate = searchParams.get("tripDate");
@@ -56,6 +58,7 @@ const ResultsPage: React.FC = () => {
       const destinationStrings = JSON.parse(tripDestinations);
       getCities(destinationStrings)
         .then((cities: City[]) => {
+          setCities(cities);
           calculateDistances(cities)
             .then((distances) => {
               const distanceData: CityDistanceData = {
@@ -77,19 +80,23 @@ const ResultsPage: React.FC = () => {
   }, [calculateDistances, getCities, isLoaded, tripDestinations]);
 
   return (
-    
-    <MainFrameTemplate>
     <div className={styles.ResultsPage}>
       {isParametersValid() ? (
         isLoaded ? (
           error ? (
             <p>{error}</p>
           ) : (
-            <><TripResultView
-                destinations={destinations}
-                distancesData={distancesData}
-                passengerCount={passengerCount}
-                tripDate={tripDate} /></>
+            <>
+              <EarthCanvas cities={cities} />
+              <Modal>
+                <TripResultView
+                  destinations={destinations}
+                  distancesData={distancesData}
+                  passengerCount={passengerCount}
+                  tripDate={tripDate}
+                />
+              </Modal>
+            </>
           )
         ) : (
           <p>Loading...</p>
@@ -97,6 +104,7 @@ const ResultsPage: React.FC = () => {
       ) : (
         <p>Your search is invalid.</p>
       )}
+      <Modal>
       <div className={styles.controlGroup}>
         <Button
           onClick={() =>
@@ -108,9 +116,10 @@ const ResultsPage: React.FC = () => {
           Back
         </Button>
       </div>
+      </Modal>
+      
     </div>
-    </MainFrameTemplate>
   );
 };
 
-export default ResultsPage;
+export default ThreeDimentioanalResultsPage;

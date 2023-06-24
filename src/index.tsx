@@ -3,7 +3,6 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import "./staticStyles/fonts.css";
 import reportWebVitals from "./reportWebVitals";
-import MainFrameTemplate from "./components/templates/MainFrameTemplate/MainFrameTemplate";
 import AppRouter from "./router/router";
 
 const root = ReactDOM.createRoot(
@@ -11,9 +10,7 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <React.StrictMode>
-    <MainFrameTemplate>
       <AppRouter />
-    </MainFrameTemplate>
   </React.StrictMode>
 );
 

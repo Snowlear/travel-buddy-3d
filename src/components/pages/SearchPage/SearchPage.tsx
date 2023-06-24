@@ -11,6 +11,7 @@ import { isDMY, isYMD, toDMYOrder } from "../../../utils/date";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useCitiesContext } from "../../../context/CitiesContext";
 import DatePicker from "../../molecules/DatePicker/DatePicker";
+import MainFrameTemplate from "../../templates/MainFrameTemplate/MainFrameTemplate";
 
 const SearchPage: React.FC = () => {
   const [searchParams] = useSearchParams();
@@ -94,6 +95,7 @@ const SearchPage: React.FC = () => {
   }, [navigate, passengerCount, date, destinations]);
 
   return (
+    <MainFrameTemplate>
     <div className={styles.searchPage}>
       <div className={styles.formItems}>
         <div className={styles.leftInput}>
@@ -133,6 +135,7 @@ const SearchPage: React.FC = () => {
         </Button>
       </div>
     </div>
+    </MainFrameTemplate>
   );
 };
 
