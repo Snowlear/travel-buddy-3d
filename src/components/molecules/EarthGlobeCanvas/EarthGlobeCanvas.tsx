@@ -17,15 +17,12 @@ function Zoom() {
     const handleWheel = (event: WheelEvent) => {
       event.preventDefault();
       const zoomSensivity = 0.001;
-      console.log(camera.position.z);
       if (
         (event.deltaY > 0 && camera.position.z < 7) ||
-        (event.deltaY < 0 && camera.position.z > 3.2)
+        (event.deltaY < 0 && camera.position.z > 3.0)
       ) {
         camera.position.z += event.deltaY * zoomSensivity;
-        console.log(camera.position.z);
       }
-      console.log(event.deltaY);
     };
     window.addEventListener("wheel", handleWheel);
     return () => window.removeEventListener("wheel", handleWheel);
