@@ -37,8 +37,8 @@ In order to run them;
 http://localhost:3000/?passengerCount=1&tripDate=20-06-2023&tripDestinations=[%22Montpellier%22,%22Paris%22,%22Aix-en-Provence%22]
 
 
-#### Results Page
-http://localhost:3000/results?passengerCount=1&tripDate=20-06-2023&tripDestinations=[%22Montpellier%22,%22Paris%22,%22Aix-en-Provence%22]
+#### 3D Results Page
+http://localhost:3000/3dresults?passengerCount=1&tripDate=20-06-2023&tripDestinations=[%22Montpellier%22,%22Paris%22,%22Aix-en-Provence%22]
 
 ## Technical Details
 

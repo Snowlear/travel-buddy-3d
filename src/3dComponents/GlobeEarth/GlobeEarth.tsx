@@ -108,19 +108,28 @@ const GlobeEarth: React.FC<GlobeEarthProps> = (props: GlobeEarthProps) => {
         return R * c;
     }
 
-    console.log("work");
+    const getCurveBetweenCities = ([city1, city2]: City[], R: number) => {
+        const start = getVectoralLocation(R, city1.latitude, city1.longitude);
+        const end = getVectoralLocation(R, city2.latitude, city2.longitude);
+        const distance = distanceBetweenCities([city1, city2], R);
+        const midHeight = R + distance / 4;
+        const mid = start.clone().lerp(end, 0.5).setLength(midHeight);
+        return new THREE.QuadraticBezierCurve3(start, mid, end);
+      };
 
     return (
       <>
         {calculateCityPairs(cities).map(([city1, city2]) => {
+          const curve = getCurveBetweenCities([city1, city2], 3);
+          const points = curve.getPoints(200);
+          const tubeGeometry = new THREE.TubeGeometry(curve, points.length - 1, 0.005);
+          const tubeMaterial = new THREE.MeshBasicMaterial({ color: "yellow" });
+          const tubeMesh = new THREE.Mesh(tubeGeometry, tubeMaterial);
+
           return (
-            <Arrow
-              key={`${city1.name}-${city2.name}`}
-              origin={getVectoralLocation(3, city1.latitude, city1.longitude)}
-              dir={getBetweenVector([city2, city1], 3)}
-              length={distanceBetweenCities([city1, city2], 3)}
-              color="yellow"
-            />
+            <group key={`${city1.name}-${city2.name}`}>
+              <primitive object={tubeMesh} />
+            </group>
           );
         })}
       </>

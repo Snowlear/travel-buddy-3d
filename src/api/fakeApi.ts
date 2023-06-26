@@ -2,6 +2,12 @@ import { City } from "../types/City";
 import { haversineDistance } from "./utils";
 
 const CITIES: City[] = [
+  { name: "Istanbul", latitude: 41.0082, longitude: 28.9784 },
+  { name: "New York", latitude: 40.7128, longitude: -74.0060 },
+  { name: "Rio de Janeiro", latitude: -22.9068, longitude: -43.1729 },
+  { name: "Brasília", latitude: -15.8267, longitude: -47.9218 },
+  { name: "Salvador", latitude: -12.9722, longitude: -38.5014 },
+  { name: "Fortaleza", latitude: -3.7319, longitude: -38.5267 },
   { name: "Paris", latitude: 48.856614, longitude: 2.352222 },
   { name: "Marseille", latitude: 43.296482, longitude: 5.36978 },
   { name: "Lyon", latitude: 45.764043, longitude: 4.835659 },

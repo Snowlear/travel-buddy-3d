@@ -124,7 +124,7 @@ const SearchPage: React.FC = () => {
         <Button
           onClick={() =>
             navigate(
-              `results?passengerCount=${passengerCount}&tripDate=${date}&tripDestinations=${JSON.stringify(
+              `3dresults?passengerCount=${passengerCount}&tripDate=${date}&tripDestinations=${JSON.stringify(
                 destinations.map((item) => item.name)
               )}`
             )
