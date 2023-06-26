@@ -2,7 +2,6 @@ import * as React from "react";
 import { useEffect } from "react";
 import { Canvas, useThree } from "@react-three/fiber";
 import { City, CityDistanceData } from "../../../types/City";
-import Dot from "../../../3dComponents/Dot/Dot";
 import GlobeEarth from "../../../3dComponents/GlobeEarth/GlobeEarth";
 
 interface EarthCanvasProps {
@@ -15,11 +14,10 @@ function Zoom() {
 
   useEffect(() => {
     const handleWheel = (event: WheelEvent) => {
-      event.preventDefault();
       const zoomSensivity = 0.001;
       if (
         (event.deltaY > 0 && camera.position.z < 7) ||
-        (event.deltaY < 0 && camera.position.z > 3.0)
+        (event.deltaY < 0 && camera.position.z > 3.3)
       ) {
         camera.position.z += event.deltaY * zoomSensivity;
       }
@@ -31,7 +29,7 @@ function Zoom() {
 }
 
 const EarthCanvas: React.FC<EarthCanvasProps> = (props: EarthCanvasProps) => {
-  const { cities, cityDistance } = props;
+  const { cities } = props;
   return (
     <Canvas style={{ height: "100vh" }}>
       <Zoom />

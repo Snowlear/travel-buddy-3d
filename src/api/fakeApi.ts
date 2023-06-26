@@ -63,11 +63,11 @@ export const calculateDistances = async (cities: City[]) => {
   return distances;
 };
 
-export const getCities = async (cityNames: string[]) => {
+export const getCities = async (cityNames: string[]): Promise<City[]> => {
   await new Promise((resolve) => setTimeout(resolve, DELAY));
-  const cities = CITIES.filter((city) => cityNames.includes(city.name));
-  if (cities.length !== cityNames.length) {
-    throw new Error("One or more cities not found");
+  const cities = cityNames.map(cityName => CITIES.find(city => city.name === cityName));
+  if (cities.some(city => city === undefined)) {
+      throw new Error("One or more cities not found");
   }
-  return cities;
+  return cities as City[];
 };

@@ -14,3 +14,20 @@
     width: 100%;
   }
 }
+
+.tripResultModalWrapper {
+  bottom: 50px;
+  background-color: rgba(240, 248, 255, 0.37);
+}
+
+.controlGroupModalWrapper {
+  bottom: 0px;
+  padding-bottom: 10px;
+  padding-top: 2px;
+  margin: 0px;
+  background-color: rgba(240, 248, 255, 0.37);
+}
+
+.controlGroupModalWrapper div{
+  margin: 0px;
+}

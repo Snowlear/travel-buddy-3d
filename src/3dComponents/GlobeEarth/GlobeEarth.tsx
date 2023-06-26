@@ -26,40 +26,102 @@ const GlobeEarth: React.FC<GlobeEarthProps> = (props: GlobeEarthProps) => {
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   const [rotation, setRotation] = useState({ x: 0, y: 0 });
 
+  useEffect(() => {
+    if (cities.length > 0) {
+      const firstCity = cities[0];
+      const targetRotation = {
+        x: (95 - firstCity.latitude) * (Math.PI / 180),
+        y: 300 - firstCity.longitude * (Math.PI / 180),
+      };
+      console.log((90 - firstCity.latitude) * (Math.PI / 180));
+      setRotation(targetRotation);
+    }
+  }, [cities]);
+
   const cityArrows = useMemo(() => {
     const calculateCityPairs = (cities: City[]) => {
-        console.log(cities);
+      console.log(cities);
       const cityPairs: [City, City][] = [];
       for (let i = 0; i < cities.length; i++) {
-        if(i+1 < cities.length) {
-            cityPairs.push([cities[i], cities[i+1]]);   
+        if (i + 1 < cities.length) {
+          cityPairs.push([cities[i], cities[i + 1]]);
         }
-        
       }
       return cityPairs;
     };
 
     const getVectoralLocation = (radius: number, lat: number, lon: number) => {
-      const spherical = new THREE.Spherical(
-        radius,
-        THREE.MathUtils.degToRad(90 - lat),
-        THREE.MathUtils.degToRad(lon + 90)
-      );
-      return new THREE.Vector3().setFromSpherical(spherical);
+      const phi = THREE.MathUtils.degToRad(90 - lat);
+      const theta = THREE.MathUtils.degToRad(lon + 180);
+
+      const x = -radius * Math.sin(phi) * Math.cos(theta);
+      const y = radius * Math.cos(phi);
+      const z = radius * Math.sin(phi) * Math.sin(theta);
+
+      return new THREE.Vector3(x, y, z);
     };
 
-    console.log(calculateCityPairs(cities))
+    const getBetweenVector = ([city1, city2]: City[], R: number) => {
+        console.log(city1.name + " " + city2.name);
+      const city1Lat = city1.latitude * (Math.PI / 180); // Convert latitude to radians
+      const city1Lon = city1.longitude * (Math.PI / 180); // Convert longitude to radians
+      const city2Lat = city2.latitude * (Math.PI / 180); // Convert latitude to radians
+      const city2Lon = city2.longitude * (Math.PI / 180); // Convert longitude to radians
+
+      // Calculate city1's 3D location on Earth
+      const x1 = R * Math.cos(city1Lat) * Math.cos(city1Lon);
+      const y1 = R * Math.cos(city1Lat) * Math.sin(city1Lon);
+      const z1 = R * Math.sin(city1Lat);
+
+      // Calculate city2's 3D location on Earth
+      const x2 = R * Math.cos(city2Lat) * Math.cos(city2Lon);
+      const y2 = R * Math.cos(city2Lat) * Math.sin(city2Lon);
+      const z2 = R * Math.sin(city2Lat);
+
+      // Calculate the direction vector from city1 to city2
+      const dx = x2 - x1;
+      const dy = y2 - y1;
+      const dz = z2 - z1;
+
+      // Normalize the direction vector
+      const length = Math.sqrt(dx * dx + dy * dy + dz * dz);
+      const dirX = (dx + 0.004) / length;
+      console.log(dx);
+      const dirY = dy / length;
+      const dirZ = dz / length;
+
+      return new THREE.Vector3(dirZ, dirX, dirY);
+    };
+
+    const distanceBetweenCities = ([city1, city2]: City[], R: number) => {
+        const lat1 = city1.latitude * Math.PI / 180;
+        const lon1 = city1.longitude * Math.PI / 180;
+        const lat2 = city2.latitude * Math.PI / 180;
+        const lon2 = city2.longitude * Math.PI / 180;
+    
+        const dlat = lat2 - lat1;
+        const dlon = lon2 - lon1;
+    
+        const a = Math.sin(dlat / 2) ** 2 + Math.cos(lat1) * Math.cos(lat2) * Math.sin(dlon / 2) ** 2;
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    
+        return R * c;
+    }
+
+    console.log("work");
 
     return (
       <>
         {calculateCityPairs(cities).map(([city1, city2]) => {
-          return <Arrow
-            key={`${city1.name}-${city2.name}`}
-            origin={getVectoralLocation(3, city1.latitude, city1.longitude)}
-            dir={getVectoralLocation(3, city2.latitude, city2.longitude)}
-            length={0.1}
-            color="red"
-          />;
+          return (
+            <Arrow
+              key={`${city1.name}-${city2.name}`}
+              origin={getVectoralLocation(3, city1.latitude, city1.longitude)}
+              dir={getBetweenVector([city2, city1], 3)}
+              length={distanceBetweenCities([city1, city2], 3)}
+              color="yellow"
+            />
+          );
         })}
       </>
     );
@@ -86,6 +148,7 @@ const GlobeEarth: React.FC<GlobeEarthProps> = (props: GlobeEarthProps) => {
         x: event.nativeEvent.clientX - dragStart.x,
         y: event.nativeEvent.clientY - dragStart.y,
       };
+      console.log(rotation.x + delta.y * 0.001);
       setRotation((prevRotation) => ({
         x: prevRotation.x + delta.y * 0.001,
         y: prevRotation.y + delta.x * 0.001,
@@ -117,7 +180,7 @@ const GlobeEarth: React.FC<GlobeEarthProps> = (props: GlobeEarthProps) => {
       onPointerMove={handlePointerMove}
       onPointerUp={handlePointerUp}
     >
-      <sphereGeometry args={[3, 128, 128]} />
+      <sphereGeometry args={[3, 64, 64]} />
       <meshStandardMaterial
         attach="material"
         color="white"
@@ -125,7 +188,7 @@ const GlobeEarth: React.FC<GlobeEarthProps> = (props: GlobeEarthProps) => {
         bumpMap={bumpMapTexture}
         metalnessMap={waterMapTexture}
         transparent={true}
-        opacity={0.2} // Adjust the opacity to your preference
+        opacity={1}
       >
         <primitive
           attach="map"

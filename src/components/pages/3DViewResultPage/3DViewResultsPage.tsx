@@ -89,7 +89,7 @@ const ThreeDimentioanalResultsPage: React.FC = () => {
           ) : (
             <>
               <EarthCanvas cities={cities} />
-              <Modal>
+              <Modal className={styles.tripResultModalWrapper}>
                 <TripResultView
                   destinations={destinations}
                   distancesData={distancesData}
@@ -105,7 +105,7 @@ const ThreeDimentioanalResultsPage: React.FC = () => {
       ) : (
         <p>Your search is invalid.</p>
       )}
-      <Modal>
+      <Modal className={styles.controlGroupModalWrapper}>
       <div className={styles.controlGroup}>
         <Button
           onClick={() =>
