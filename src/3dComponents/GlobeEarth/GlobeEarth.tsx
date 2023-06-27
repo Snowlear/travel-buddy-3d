@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect, useMemo } from "react";
-import { useFrame, ThreeEvent } from "react-three-fiber";
-
+import { useFrame, ThreeEvent, useThree } from "react-three-fiber";
+import { Text } from "@react-three/drei";
 import * as THREE from "three";
 import Earth from "../../assets/images/earth.jpg";
 import BumpMap from "../../assets/images/bump_map.jpg";
@@ -20,6 +20,7 @@ interface GlobeEarthProps {
 const GlobeEarth: React.FC<GlobeEarthProps> = (props: GlobeEarthProps) => {
   const { cities } = props;
   const ref = useRef<THREE.Mesh>(null!);
+  const { camera } = useThree();
   const [hovered, hover] = useState(false);
 
   const [isDragging, setIsDragging] = useState(false);
@@ -33,14 +34,12 @@ const GlobeEarth: React.FC<GlobeEarthProps> = (props: GlobeEarthProps) => {
         x: (95 - firstCity.latitude) * (Math.PI / 180),
         y: 300 - firstCity.longitude * (Math.PI / 180),
       };
-      console.log((90 - firstCity.latitude) * (Math.PI / 180));
       setRotation(targetRotation);
     }
   }, [cities]);
 
   const cityArrows = useMemo(() => {
     const calculateCityPairs = (cities: City[]) => {
-      console.log(cities);
       const cityPairs: [City, City][] = [];
       for (let i = 0; i < cities.length; i++) {
         if (i + 1 < cities.length) {
@@ -61,68 +60,42 @@ const GlobeEarth: React.FC<GlobeEarthProps> = (props: GlobeEarthProps) => {
       return new THREE.Vector3(x, y, z);
     };
 
-    const getBetweenVector = ([city1, city2]: City[], R: number) => {
-        console.log(city1.name + " " + city2.name);
-      const city1Lat = city1.latitude * (Math.PI / 180); // Convert latitude to radians
-      const city1Lon = city1.longitude * (Math.PI / 180); // Convert longitude to radians
-      const city2Lat = city2.latitude * (Math.PI / 180); // Convert latitude to radians
-      const city2Lon = city2.longitude * (Math.PI / 180); // Convert longitude to radians
+    const distanceBetweenCities = ([city1, city2]: City[], R: number) => {
+      const lat1 = (city1.latitude * Math.PI) / 180;
+      const lon1 = (city1.longitude * Math.PI) / 180;
+      const lat2 = (city2.latitude * Math.PI) / 180;
+      const lon2 = (city2.longitude * Math.PI) / 180;
 
-      // Calculate city1's 3D location on Earth
-      const x1 = R * Math.cos(city1Lat) * Math.cos(city1Lon);
-      const y1 = R * Math.cos(city1Lat) * Math.sin(city1Lon);
-      const z1 = R * Math.sin(city1Lat);
+      const dlat = lat2 - lat1;
+      const dlon = lon2 - lon1;
 
-      // Calculate city2's 3D location on Earth
-      const x2 = R * Math.cos(city2Lat) * Math.cos(city2Lon);
-      const y2 = R * Math.cos(city2Lat) * Math.sin(city2Lon);
-      const z2 = R * Math.sin(city2Lat);
+      const a =
+        Math.sin(dlat / 2) ** 2 +
+        Math.cos(lat1) * Math.cos(lat2) * Math.sin(dlon / 2) ** 2;
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
-      // Calculate the direction vector from city1 to city2
-      const dx = x2 - x1;
-      const dy = y2 - y1;
-      const dz = z2 - z1;
-
-      // Normalize the direction vector
-      const length = Math.sqrt(dx * dx + dy * dy + dz * dz);
-      const dirX = (dx + 0.004) / length;
-      console.log(dx);
-      const dirY = dy / length;
-      const dirZ = dz / length;
-
-      return new THREE.Vector3(dirZ, dirX, dirY);
+      return R * c;
     };
 
-    const distanceBetweenCities = ([city1, city2]: City[], R: number) => {
-        const lat1 = city1.latitude * Math.PI / 180;
-        const lon1 = city1.longitude * Math.PI / 180;
-        const lat2 = city2.latitude * Math.PI / 180;
-        const lon2 = city2.longitude * Math.PI / 180;
-    
-        const dlat = lat2 - lat1;
-        const dlon = lon2 - lon1;
-    
-        const a = Math.sin(dlat / 2) ** 2 + Math.cos(lat1) * Math.cos(lat2) * Math.sin(dlon / 2) ** 2;
-        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    
-        return R * c;
-    }
-
     const getCurveBetweenCities = ([city1, city2]: City[], R: number) => {
-        const start = getVectoralLocation(R, city1.latitude, city1.longitude);
-        const end = getVectoralLocation(R, city2.latitude, city2.longitude);
-        const distance = distanceBetweenCities([city1, city2], R);
-        const midHeight = R + distance / 4;
-        const mid = start.clone().lerp(end, 0.5).setLength(midHeight);
-        return new THREE.QuadraticBezierCurve3(start, mid, end);
-      };
+      const start = getVectoralLocation(R, city1.latitude, city1.longitude);
+      const end = getVectoralLocation(R, city2.latitude, city2.longitude);
+      const distance = distanceBetweenCities([city1, city2], R);
+      const midHeight = R + distance / 4;
+      const mid = start.clone().lerp(end, 0.5).setLength(midHeight);
+      return new THREE.QuadraticBezierCurve3(start, mid, end);
+    };
 
     return (
       <>
         {calculateCityPairs(cities).map(([city1, city2]) => {
           const curve = getCurveBetweenCities([city1, city2], 3);
           const points = curve.getPoints(200);
-          const tubeGeometry = new THREE.TubeGeometry(curve, points.length - 1, 0.005);
+          const tubeGeometry = new THREE.TubeGeometry(
+            curve,
+            points.length - 1,
+            0.005
+          );
           const tubeMaterial = new THREE.MeshBasicMaterial({ color: "yellow" });
           const tubeMesh = new THREE.Mesh(tubeGeometry, tubeMaterial);
 
@@ -157,7 +130,6 @@ const GlobeEarth: React.FC<GlobeEarthProps> = (props: GlobeEarthProps) => {
         x: event.nativeEvent.clientX - dragStart.x,
         y: event.nativeEvent.clientY - dragStart.y,
       };
-      console.log(rotation.x + delta.y * 0.001);
       setRotation((prevRotation) => ({
         x: prevRotation.x + delta.y * 0.001,
         y: prevRotation.y + delta.x * 0.001,
@@ -169,6 +141,17 @@ const GlobeEarth: React.FC<GlobeEarthProps> = (props: GlobeEarthProps) => {
     }
   };
 
+  const getCityPosition = (lat: number, lon: number, R = 3) => {
+    const phi = THREE.MathUtils.degToRad(90 - lat);
+    const theta = THREE.MathUtils.degToRad(lon + 180);
+
+    const x = -(R + 0.02) * Math.sin(phi) * Math.cos(theta);
+    const y = (R + 0.02) * Math.cos(phi);
+    const z = (R + 0.02) * Math.sin(phi) * Math.sin(theta);
+
+    return new THREE.Vector3(x, y, z);
+  };
+
   const handlePointerUp = () => {
     setIsDragging(false);
   };
@@ -178,6 +161,31 @@ const GlobeEarth: React.FC<GlobeEarthProps> = (props: GlobeEarthProps) => {
       setIsDragging(false);
     }
   }, [hovered]);
+
+  const CityLabel = ({ city }: { city: City }) => {
+    const ref = useRef<THREE.Object3D>(null);
+    const { camera } = useThree();
+  
+    useFrame((state, delta) => {
+        if (ref.current) {
+            ref.current.lookAt(camera.position);
+          
+        }
+      });
+  
+    return (
+      <Text
+      onClick={() => {alert("x")}}
+        key={"title_" + city.name}
+        ref={ref}
+        position={getCityPosition(city.latitude, city.longitude, 3.01)}
+        fontSize={0.01 * camera.position.z}
+        color="black"
+      >
+        {city.name}
+      </Text>
+    );
+  };
 
   return (
     <mesh
@@ -207,12 +215,15 @@ const GlobeEarth: React.FC<GlobeEarthProps> = (props: GlobeEarthProps) => {
       </meshStandardMaterial>
       {cities &&
         cities.map((city) => (
-          <Dot
-            onClick={() => alert(city.name)}
-            key={city.name}
-            lat={city.latitude}
-            lon={city.longitude}
-          />
+          <>
+            <Dot
+              onClick={() => alert(city.name)}
+              key={city.name}
+              lat={city.latitude}
+              lon={city.longitude}
+            />
+            {CityLabel({ city: city })}
+          </>
         ))}
       {cityArrows}
     </mesh>

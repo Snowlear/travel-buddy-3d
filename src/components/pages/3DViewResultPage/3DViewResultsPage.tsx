@@ -59,7 +59,6 @@ const ThreeDimentioanalResultsPage: React.FC = () => {
       getCities(destinationStrings)
         .then((cities: City[]) => {
           setCities(cities);
-          console.log(cities);
           calculateDistances(cities)
             .then((distances) => {
               const distanceData: CityDistanceData = {

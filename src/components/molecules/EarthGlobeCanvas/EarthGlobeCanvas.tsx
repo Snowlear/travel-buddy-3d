@@ -35,7 +35,7 @@ const EarthCanvas: React.FC<EarthCanvasProps> = (props: EarthCanvasProps) => {
       <Zoom />
       <ambientLight intensity={1} />
       <spotLight position={[100, 100, 100]} angle={0.15} penumbra={1} />
-      <GlobeEarth cities={cities!} />
+      <GlobeEarth cities={cities!}/>
     </Canvas>
   );
 }
