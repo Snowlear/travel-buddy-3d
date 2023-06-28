@@ -3,7 +3,7 @@ import * as THREE from "three";
 interface DotProps {
   lat: number;
   lon: number;
-  onClick: () => void;
+  onClick?: () => void;
 }
 
 const Dot: React.FC<DotProps> = ({ lat, lon, onClick }) => {

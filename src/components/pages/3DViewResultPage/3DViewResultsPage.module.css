@@ -13,6 +13,9 @@
   .controlGroup {
     width: 100%;
   }
+  .cityModalXButton{
+    width: auto!important;
+  }
 }
 
 .tripResultModalWrapper {
@@ -30,4 +33,21 @@
 
 .controlGroupModalWrapper div{
   margin: 0px;
+}
+
+.cityModalWrapper {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: aliceblue;
+  padding: 20px;
+  border-radius: 10px;
+  width: auto!important;
+}
+
+.cityModalXButton {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  padding: 2px 7px 2px 7px;
 }

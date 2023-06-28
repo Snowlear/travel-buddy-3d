@@ -8,6 +8,7 @@ import WaterMap from "../../assets/images/water.png";
 import { City } from "../../types/City";
 import Dot from "../Dot/Dot";
 import Arrow from "../Arrow/Arrow";
+import React from "react";
 
 const earthTexture = new THREE.TextureLoader().load(Earth);
 const bumpMapTexture = new THREE.TextureLoader().load(BumpMap);
@@ -15,14 +16,13 @@ const waterMapTexture = new THREE.TextureLoader().load(WaterMap);
 
 interface GlobeEarthProps {
   cities: City[];
+  setSelectedCity: (a: City) => void;
 }
 
 const GlobeEarth: React.FC<GlobeEarthProps> = (props: GlobeEarthProps) => {
-  const { cities } = props;
+  const { cities, setSelectedCity } = props;
   const ref = useRef<THREE.Mesh>(null!);
-  const { camera } = useThree();
   const [hovered, hover] = useState(false);
-
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   const [rotation, setRotation] = useState({ x: 0, y: 0 });
@@ -100,7 +100,7 @@ const GlobeEarth: React.FC<GlobeEarthProps> = (props: GlobeEarthProps) => {
           const tubeMesh = new THREE.Mesh(tubeGeometry, tubeMaterial);
 
           return (
-            <group key={`${city1.name}-${city2.name}`}>
+            <group key={`arrow_${city1.name}-${city2.name}`}>
               <primitive object={tubeMesh} />
             </group>
           );
@@ -175,7 +175,7 @@ const GlobeEarth: React.FC<GlobeEarthProps> = (props: GlobeEarthProps) => {
   
     return (
       <Text
-      onClick={() => {alert("x")}}
+        onClick={() => {setSelectedCity(city)}}
         key={"title_" + city.name}
         ref={ref}
         position={getCityPosition(city.latitude, city.longitude, 3.01)}
@@ -215,15 +215,13 @@ const GlobeEarth: React.FC<GlobeEarthProps> = (props: GlobeEarthProps) => {
       </meshStandardMaterial>
       {cities &&
         cities.map((city) => (
-          <>
+          <React.Fragment key={"dot_"+city.name}>
             <Dot
-              onClick={() => alert(city.name)}
-              key={city.name}
               lat={city.latitude}
               lon={city.longitude}
             />
             {CityLabel({ city: city })}
-          </>
+          </React.Fragment>
         ))}
       {cityArrows}
     </mesh>

@@ -19,6 +19,7 @@ const ThreeDimentioanalResultsPage: React.FC = () => {
   const passengerCount = searchParams.get("passengerCount");
   const tripDate = searchParams.get("tripDate");
   const tripDestinations = searchParams.get("tripDestinations");
+  const [ selectedCity, setSelectedCity] = useState<City | undefined>(undefined); 
   const [destinations] = useState<string[]>(JSON.parse(tripDestinations!));
   const { getCities, isValidCity, calculateDistances } = useCitiesContext();
   const isParametersValid = () => {
@@ -87,7 +88,7 @@ const ThreeDimentioanalResultsPage: React.FC = () => {
             <p>{error}</p>
           ) : (
             <>
-              <EarthCanvas cities={cities} />
+              <EarthCanvas cities={cities} setSelectedCity={setSelectedCity}/>
               <Modal className={styles.tripResultModalWrapper}>
                 <TripResultView
                   destinations={destinations}
@@ -96,6 +97,10 @@ const ThreeDimentioanalResultsPage: React.FC = () => {
                   tripDate={tripDate}
                 />
               </Modal>
+              {selectedCity && <Modal className={styles.cityModalWrapper}>
+                <Button onClick={() => setSelectedCity(undefined)} className={styles.cityModalXButton}>X</Button>
+                <p>{selectedCity.name}</p>
+                </Modal>}
             </>
           )
         ) : (
